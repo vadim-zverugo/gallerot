@@ -1,0 +1,40 @@
+.container {
+    margin: 100px auto auto 100px;
+    position: relative;
+    width: 300px;
+    height: 200px;
+    /* задаем глубину сцене */
+    -webkit-perspective: 600px; /* webkit */
+    -moz-perspective: 600px; /* mozilla */
+    -ms-perspective: 600px; /* IE 10 */
+    -o-perspective: 600px; /* opera когда-то тоже должна начать понимать */
+    perspective: 600px;	/* св-во по стандартам */
+
+    -webkit-transition-duration: 0.5s; /* фиксит баг в хроме */
+
+
+}
+.container:hover {
+    -webkit-perspective: 900px; /* фиксит баг в хроме на пару с предыдущим, значение подбираем вручную (больше, чем начальное) */
+}
+figure {
+    width: 100%;
+    height: 100%;
+    background: red;
+    border: 1px solid #000;
+    position: absolute;
+    display: block;
+    -webkit-transition: -webkit-transform 0.5s;
+    -moz-transition: -moz-transform 0.5s;
+    -ms-transition: -moz-transform 0.5s;
+    -o-transition: -o-transform 0.5s;
+    transition: transform 0.5s; /* трансформации будут происходить анимированно продолжительностью 0.5 сек */
+}
+
+.container:hover figure{
+    -webkit-transform: rotateY( 45deg );
+    -moz-transform: rotateY( 45deg );
+    -ms-transform: rotateY( 45deg );
+    -o-transform: rotateY( 45deg );
+    transform: rotateY( 45deg ); /* поворачиваем фигуру на 45 градусов */
+}
