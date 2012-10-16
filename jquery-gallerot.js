@@ -17,11 +17,12 @@
         var rightSlidingControl = $(params.rightSlidingControl);
 
         if (containerWidth > 0 && containerHeight > 0) {
-
+            if (params.slideWidth == null || params.slideHeight == null) {
+            } else {
+            }
         }
     }
 })(jQuery);
-
 
 function initFeaturedPractitionersControl(container, practitionerBoxMinSideMargin, animationSpeed) {
     var sliderContentWidth = jQuery(container).width() - jQuery(".left_slider_control").width() - jQuery(".right_slider_control").width();
