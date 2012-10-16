@@ -1,6 +1,24 @@
 (function($) {
     $.fn.gallerot = function(params) {
+        params = $.extend({
+            leftSlidingControl : null,
+            rightSlidingControl : null,
+            slideWidth : null,
+            slideHeight : null,
+            rotatingAngel : 45,
+            slidingSpeed : 500,
+            enableMouseSliding: true
+        }, params);
 
+        var container = $(this);
+        var containerWidth = $(container).width();
+        var containerHeight = $(container).height();
+        var leftSlidingControl = $(params.leftSlidingControl);
+        var rightSlidingControl = $(params.rightSlidingControl);
+
+        if (containerWidth > 0 && containerHeight > 0) {
+
+        }
     }
 })(jQuery);
 
