@@ -1,29 +1,71 @@
 (function($) {
     $.fn.gallerot = function(params) {
+        // Default parameters
         params = $.extend({
+            perspective: 600,
             leftSlidingControl : null,
             rightSlidingControl : null,
             slideWidth : null,
             slideHeight : null,
-            rotatingAngel : 45,
+            rotatingAngel : 50,
+            rotatingSpeed : 500,
             slidingSpeed : 500,
             enableMouseSliding: true
         }, params);
 
+        // Base container parameters
         var container = $(this);
         var containerWidth = $(container).width();
         var containerHeight = $(container).height();
-        var leftSlidingControl = $(params.leftSlidingControl);
-        var rightSlidingControl = $(params.rightSlidingControl);
 
         if (containerWidth > 0 && containerHeight > 0) {
-            if (params.slideWidth == null || params.slideHeight == null) {
-            } else {
-            }
+            // Stylizing container
+            $(container).css({
+                position: 'relative',
+                'perspective': (params.perspective + 'px'),
+                '-moz-perspective' : (params.perspective + 'px'),
+                '-webkit-perspective' : (params.perspective + 'px')
+            });
+
+            // Stylizing slides
+            var slideWidth = params.slideWidth == null ? containerWidth : params.slideWidth;
+            var slideHeight = params.slideHeight == null ? containerHeight : params.slideHeight;
+            var slides = $(container).find('figure');
+            $(slides).each(function (index, slide) {
+                $(slide).width(slideWidth);
+                $(slide).height(slideHeight);
+                var rotatingSpeed = (params.rotatingSpeed / 1000 + 's');
+                $(slide).css({
+                    position: 'absolute',
+                    display: 'block',
+                    'transition': ('transform ' + rotatingSpeed),
+                    '-moz-transition': ('-moz-transform ' + rotatingSpeed),
+                    '-webkit-transition': ('-webkit-transform ' + rotatingSpeed)
+                });
+
+                // TODO: Test rotating...
+                $(slide).hover(function () {
+                    $(slide).css({
+                        'transform': ('rotateY(' + params.rotatingAngel + 'deg)'),
+                        '-moz-transform': ('rotateY(' + params.rotatingAngel + 'deg)'),
+                        '-webkit-transform': ('rotateY(' + params.rotatingAngel + 'deg)')
+                    });
+                }, function () {
+                    $(slide).css({
+                        'transform': 'rotateY(0deg)',
+                        '-moz-transform': 'rotateY(0deg)',
+                        '-webkit-transform': 'rotateY(0deg)'
+                    });
+                });
+            });
+
+            var leftSlidingControl = $(params.leftSlidingControl);
+            var rightSlidingControl = $(params.rightSlidingControl);
         }
     }
 })(jQuery);
 
+/*
 function initFeaturedPractitionersControl(container, practitionerBoxMinSideMargin, animationSpeed) {
     var sliderContentWidth = jQuery(container).width() - jQuery(".left_slider_control").width() - jQuery(".right_slider_control").width();
     jQuery(container).find(".slider_content").width(sliderContentWidth);
@@ -110,4 +152,4 @@ function showRightSliderControl(container) {
 
 function hideRightSliderControl(container) {
     jQuery(container).find(".right_slider_control").hide();
-}
+}*/
