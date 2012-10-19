@@ -2,15 +2,17 @@
     $.fn.gallerot = function(params) {
         // Default parameters
         params = $.extend({
-            perspective: 600,
             leftSlidingControl : null,
             rightSlidingControl : null,
+            perspective: 600,
             slideWidth : null,
             slideHeight : null,
+            slideMinSideMargin: 0,
             rotatingAngel : 50,
             rotatingSpeed : 500,
             slidingSpeed : 500,
-            enableMouseSliding: true
+            enableMouseSliding: true,
+            initialSlideIndex: 0
         }, params);
 
         // Base container parameters
@@ -31,13 +33,21 @@
             var slideWidth = params.slideWidth == null ? containerWidth : params.slideWidth;
             var slideHeight = params.slideHeight == null ? containerHeight : params.slideHeight;
             var slides = $(container).find('figure');
+            var initialZIndex = 5;
             $(slides).each(function (index, slide) {
                 $(slide).width(slideWidth);
                 $(slide).height(slideHeight);
                 var rotatingSpeed = (params.rotatingSpeed / 1000 + 's');
+                var slideOuterWidth = (slideWidth + (params.slideMinSideMargin * 2));
                 $(slide).css({
                     position: 'absolute',
+                    left: ((index * slideOuterWidth) + 'px'),
                     display: 'block',
+                    zIndex: (initialZIndex++),
+                    width: (slideWidth + 'px'),
+                    height: (slideHeight + 'px'),
+                    marginLeft: (params.slideMinSideMargin + 'px'),
+                    marginRight: (params.slideMinSideMargin + 'px'),
                     'transition': ('transform ' + rotatingSpeed),
                     '-moz-transition': ('-moz-transform ' + rotatingSpeed),
                     '-webkit-transition': ('-webkit-transform ' + rotatingSpeed)
