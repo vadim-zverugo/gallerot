@@ -1,77 +1,21 @@
 (function($) {
     $.fn.gallerot = function(params) {
-        // Default parameters
         params = $.extend({
-            leftSlidingControl : null,
-            rightSlidingControl : null,
-            perspective: 600,
-            slideWidth : null,
-            slideHeight : null,
-            slideMinSideMargin: 0,
-            rotatingAngel : 50,
-            rotatingSpeed : 500,
-            slidingSpeed : 500,
-            enableMouseSliding: true,
-            initialSlideIndex: 0
+            width: null,
+            height: null,
+            leftControl : null,
+            rightControl : null,
+            animationSpeed: 500
         }, params);
 
-        // Base container parameters
         var container = $(this);
-        var containerWidth = $(container).width();
-        var containerHeight = $(container).height();
-
-        if (containerWidth > 0 && containerHeight > 0) {
-            // Stylizing container
-            $(container).css({
-                position: 'relative',
-                'perspective': (params.perspective + 'px'),
-                '-moz-perspective' : (params.perspective + 'px'),
-                '-webkit-perspective' : (params.perspective + 'px')
-            });
-
-            // Stylizing slides
-            var slideWidth = params.slideWidth == null ? containerWidth : params.slideWidth;
-            var slideHeight = params.slideHeight == null ? containerHeight : params.slideHeight;
-            var slides = $(container).find('figure');
-            var initialZIndex = 5;
-            $(slides).each(function (index, slide) {
-                $(slide).width(slideWidth);
-                $(slide).height(slideHeight);
-                var rotatingSpeed = (params.rotatingSpeed / 1000 + 's');
-                var slideOuterWidth = (slideWidth + (params.slideMinSideMargin * 2));
-                $(slide).css({
-                    position: 'absolute',
-                    left: ((index * slideOuterWidth) + 'px'),
-                    display: 'block',
-                    zIndex: (initialZIndex++),
-                    width: (slideWidth + 'px'),
-                    height: (slideHeight + 'px'),
-                    marginLeft: (params.slideMinSideMargin + 'px'),
-                    marginRight: (params.slideMinSideMargin + 'px'),
-                    'transition': ('transform ' + rotatingSpeed),
-                    '-moz-transition': ('-moz-transform ' + rotatingSpeed),
-                    '-webkit-transition': ('-webkit-transform ' + rotatingSpeed)
-                });
-
-                // TODO: Test rotating...
-                $(slide).hover(function () {
-                    $(slide).css({
-                        'transform': ('rotateY(' + params.rotatingAngel + 'deg)'),
-                        '-moz-transform': ('rotateY(' + params.rotatingAngel + 'deg)'),
-                        '-webkit-transform': ('rotateY(' + params.rotatingAngel + 'deg)')
-                    });
-                }, function () {
-                    $(slide).css({
-                        'transform': 'rotateY(0deg)',
-                        '-moz-transform': 'rotateY(0deg)',
-                        '-webkit-transform': 'rotateY(0deg)'
-                    });
-                });
-            });
-
-            var leftSlidingControl = $(params.leftSlidingControl);
-            var rightSlidingControl = $(params.rightSlidingControl);
-        }
+        var containerParent = $(container).parent();
+        var containerWidth = params.width != null ? params.width : containerParent.innerWidth();
+        var containerHeight = params.height != null ? params.height : containerParent.innerHeight();
+        jQuery(container).css({
+            width: (containerWidth + 'px'),
+            height: (containerHeight + 'px')
+        });
     }
 })(jQuery);
 
