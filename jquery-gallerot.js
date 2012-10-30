@@ -77,9 +77,10 @@
 
 /*
 function initFeaturedPractitionersControl(container, practitionerBoxMinSideMargin, animationSpeed) {
-    var sliderContentWidth = jQuery(container).width() - jQuery(".left_slider_control").width() - jQuery(".right_slider_control").width();
-    jQuery(container).find(".slider_content").width(sliderContentWidth);
-    var practitionerBoxes = jQuery(container).find(".practitioner");
+    var jContainer = jQuery(container);
+    var sliderContentWidth = jContainer.width() - jQuery(".left_slider_control").width() - jQuery(".right_slider_control").width();
+    jContainer.find(".slider_content").width(sliderContentWidth);
+    var practitionerBoxes = jContainer.find(".practitioner");
     if (practitionerBoxes.length > 0) {
         var practitionerBoxWidth = jQuery(practitionerBoxes[0]).width();
         var numberOfBoxesToShow = Math.floor(sliderContentWidth / (practitionerBoxWidth + (2 * practitionerBoxMinSideMargin)));
@@ -93,42 +94,54 @@ function initFeaturedPractitionersControl(container, practitionerBoxMinSideMargi
         }
 
         var practitionerBoxWidthWithSideMargin = practitionerBoxWidth + (2 * practitionerBoxSideMargin);
-        jQuery(practitionerBoxes).each(function(index, practitionerBox) {
+        jQuery(practitionerBoxes).each(function (index, practitionerBox) {
             jQuery(practitionerBox).css({
-                marginLeft: (practitionerBoxSideMargin + 'px'),
-                marginRight: (practitionerBoxSideMargin + 'px'),
-                left: ((index * practitionerBoxWidthWithSideMargin) + 'px')
+                marginLeft:(practitionerBoxSideMargin + 'px'),
+                marginRight:(practitionerBoxSideMargin + 'px'),
+                left:((index * practitionerBoxWidthWithSideMargin) + 'px')
             });
         });
         controlSliderLimits(container);
 
-        jQuery(container).find(".left_slider_control").click(function() {
+        jContainer.find(".left_slider_control").click(function () {
             jQuery(this).hide();
             var leftSliderControl = this;
-            jQuery(container).find(".practitioner").each(function(index, practitionerBox) {
+            jContainer.find(".practitioner").each(function (index, practitionerBox) {
                 var currentPosition = jQuery(practitionerBox).position().left;
                 jQuery(practitionerBox).stop().animate({
-                    left: ((currentPosition + practitionerBoxWidthWithSideMargin) + 'px')
-                }, animationSpeed, function() {
+                    left:((currentPosition + practitionerBoxWidthWithSideMargin) + 'px')
+                }, animationSpeed, function () {
                     jQuery(leftSliderControl).show();
                     controlSliderLimits(container);
                 });
             });
         });
 
-        jQuery(container).find(".right_slider_control").click(function() {
+        jContainer.find(".right_slider_control").click(function () {
             jQuery(this).hide();
             var rightSliderControl = this;
-            jQuery(container).find(".practitioner").each(function(index, practitionerBox) {
+            jContainer.find(".practitioner").each(function (index, practitionerBox) {
                 var currentPosition = jQuery(practitionerBox).position().left;
                 jQuery(practitionerBox).stop().animate({
-                    left: ((currentPosition - practitionerBoxWidthWithSideMargin) + 'px')
-                }, animationSpeed, function() {
+                    left:((currentPosition - practitionerBoxWidthWithSideMargin) + 'px')
+                }, animationSpeed, function () {
                     jQuery(rightSliderControl).show();
                     controlSliderLimits(container);
                 });
             });
         });
+
+        if (jQuery.fn.swipe) {
+            jContainer.swipe({
+                swipe:function (event, direction, distance, duration, fingerCount) {
+                    if (direction === 'left' && jContainer.find(".right_slider_control").is(":visible")) {
+                        jContainer.find(".right_slider_control").click();
+                    } else if (direction === 'right' && jContainer.find(".left_slider_control").is(":visible")) {
+                        jContainer.find(".left_slider_control").click();
+                    }
+                }
+            })
+        }
     }
 }
 
@@ -162,4 +175,5 @@ function showRightSliderControl(container) {
 
 function hideRightSliderControl(container) {
     jQuery(container).find(".right_slider_control").hide();
-}*/
+}
+*/
