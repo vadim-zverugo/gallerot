@@ -1,1 +1,40 @@
+.slider-left-control {
+    float: left;
+    width: 50px;
+    height: 200px;
+    background-color: #ccc;
+    margin-right: 10px;
+    cursor: pointer;
+}
 
+.slider-right-control {
+    float: left;
+    width: 50px;
+    height: 200px;
+    background-color: #ccc;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.slider-container {
+    float: left;
+}
+
+.slider-container .slide-box {
+    position: relative;
+    margin: 0 5px;
+}
+
+.slider-container .slide-box .picture {
+}
+
+.slider-container .slide-box .picture img {
+    height: 200px;
+}
+
+.slider-container .slide-box .caption {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+}

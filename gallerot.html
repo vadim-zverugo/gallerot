@@ -8,44 +8,67 @@
         <script src="jquery-gallerot.js"></script>
         <script>
             jQuery(document).ready(function() {
-                jQuery("#gallerot-container").gallerot({
+                jQuery("#gallerot").gallerot({
                     width: 1000,
-                    height: 400
+                    height: 200,
+                    leftControl: '#gallerot-left',
+                    rightControl: '#gallerot-right'
                 });
             });
         </script>
     </head>
 
     <body>
-        <div>
-            <div id="gallerot-container">
-                <ul>
-                    <li>
-                        <div></div>
-                        <span>Slide #1</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <span>Slide #2</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <span>Slide #3</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <span>Slide #4</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <span>Slide #5</span>
-                    </li>
-                    <li>
-                        <div></div>
-                        <span>Slide #6</span>
-                    </li>
-                </ul>
-            </div>
+    <div id="gallerot-left" class="slider-left-control"></div>
+
+    <div class="slider-container">
+        <div id="gallerot">
+            <ul>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/1.jpg">
+                        </div>
+                        <span class="caption">New York City #1</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/2.jpg">
+                        </div>
+                        <span class="caption">New York City #2</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/3.jpg">
+                        </div>
+                        <span class="caption">New York City #3</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/4.jpg">
+                        </div>
+                        <span class="caption">New York City #4</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/5.jpg">
+                        </div>
+                        <span class="caption">New York City #5</span>
+                    </div>
+                </li>
+            </ul>
         </div>
+
+    </div>
+
+    <div id="gallerot-right" class="slider-right-control"></div>
     </body>
 </html>

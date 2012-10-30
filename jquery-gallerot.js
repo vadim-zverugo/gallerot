@@ -1,4 +1,9 @@
 (function($) {
+
+    var listLength;
+    var listCurrentItemIndex = 0;
+    var container;
+
     $.fn.gallerot = function(params) {
         params = $.extend({
             width: null,
@@ -8,13 +13,77 @@
             animationSpeed: 500
         }, params);
 
-        var container = $(this);
+        container = $(this);
         var containerParent = $(container).parent();
         var containerWidth = params.width != null ? params.width : containerParent.innerWidth();
         var containerHeight = params.height != null ? params.height : containerParent.innerHeight();
-        jQuery(container).css({
+        $(container).css({
+            position: 'relative',
             width: (containerWidth + 'px'),
-            height: (containerHeight + 'px')
+            height: (containerHeight + 'px'),
+            margin: 0,
+            padding: 0,
+            overflow: 'hidden'
+        });
+        var list = $(container).find('ul li');
+        listLength = list.length;
+        var listWidth = 0;
+        $(list).each(function() {
+            listWidth += $(this).width();
+        });
+        $(container).find('ul').css({
+            position: 'relative',
+            width: (listWidth + 'px'),
+            listStyle: 'none',
+            margin: 0,
+            padding: 0,
+            left: 0
+        });
+        $(container).find('ul li').css({
+            float: 'left',
+            listStyle: 'none',
+            margin: 0,
+            padding: 0
+        });
+
+        $(params.leftControl).bind('click', function() {
+            if (listCurrentItemIndex > 0) {
+                listCurrentItemIndex -= 1;
+                var listPositionLeft = 0;
+                $(container).find('ul li').each(function(i, listItem) {
+                    if (i < listCurrentItemIndex) {
+                        listPositionLeft += $(listItem).width();
+                    }
+                });
+                $(container).find('ul').animate({
+                    left: ('-' + listPositionLeft + 'px')
+                }, 400);
+            }
+        });
+
+        $(params.rightControl).bind('click', function() {
+            if (listCurrentItemIndex < (listLength - 1)) {
+                listCurrentItemIndex += 1;
+                var listPositionLeft = 0;
+                $(container).find('ul li').each(function(i, listItem) {
+                    if (i < listCurrentItemIndex) {
+                        listPositionLeft += $(listItem).width();
+                    }
+                });
+                $(container).find('ul').animate({
+                    left: ('-' + listPositionLeft + 'px')
+                }, 400);
+            } else if (listCurrentItemIndex == (listLength - 1)) {
+                var l = $(container).find('ul').position().left;
+                var l2 = l - 100;
+                $(container).find('ul').animate({
+                    left: (l2 + 'px')
+                }, 400);
+                $(container).find('ul').animate({
+                    left: ('0px')
+                }, 200);
+                listCurrentItemIndex = 0;
+            }
         });
     }
 })(jQuery);
