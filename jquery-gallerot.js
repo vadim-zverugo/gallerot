@@ -1,10 +1,12 @@
 (function($) {
 
+    var localParams;
     var baseContainer;
+    var slides;
     var leftSlideIndex = 0;
 
     $.fn.gallerot = function(params) {
-        params = $.extend({
+        localParams = $.extend({
             width: null,
             height: null,
             leftControl : null,
@@ -14,10 +16,12 @@
             autoSlidingDelay: 4000
         }, params);
 
+        /* Positioning and sizing
+        --------------------------------------------------------------------------------------------------------------*/
         baseContainer = $(this);
         var baseContainerParent = $(baseContainer).parent();
-        var baseContainerWidth = params.width != null ? params.width : baseContainerParent.innerWidth();
-        var baseContainerHeight = params.height != null ? params.height : baseContainerParent.innerHeight();
+        var baseContainerWidth = localParams.width != null ? localParams.width : baseContainerParent.innerWidth();
+        var baseContainerHeight = localParams.height != null ? localParams.height : baseContainerParent.innerHeight();
         $(baseContainer).css({
             position: 'relative',
             width: (baseContainerWidth + 'px'),
@@ -27,8 +31,9 @@
             overflow: 'hidden'
         });
 
+        slides = $(baseContainer).find('ul li');
         var slidesOverallWidth = 0;
-        $(baseContainer).find('ul li').each(function() {
+        $(slides).each(function() {
             slidesOverallWidth += $(this).width();
             $(this).css({
                 float: 'left',
@@ -46,23 +51,25 @@
             left: 0
         });
 
-        $(params.leftControl).bind('click', function() {
+        /* Action listeners
+        --------------------------------------------------------------------------------------------------------------*/
+        $(localParams.leftControl).bind('click', function() {
             if (leftSlideIndex > 0) {
                 leftSlideIndex -= 1;
                 var listPositionLeft = 0;
-                $(baseContainer).find('ul li').each(function(i, listItem) {
+                $(slides).each(function(i, listItem) {
                     if (i < leftSlideIndex) {
                         listPositionLeft += $(listItem).width();
                     }
                 });
                 $(baseContainer).find('ul').animate({
                     left: ('-' + listPositionLeft + 'px')
-                }, 400);
+                }, localParams.slidingSpeed);
             }
         });
 
-        $(params.rightControl).bind('click', function() {
-            if (leftSlideIndex < ($(baseContainer).find('ul li').length - 1)) {
+        $(localParams.rightControl).bind('click', function() {
+            if (leftSlideIndex < (slides.length - 1)) {
                 leftSlideIndex += 1;
                 var listPositionLeft = 0;
                 $(baseContainer).find('ul li').each(function(i, listItem) {
@@ -72,18 +79,27 @@
                 });
                 $(baseContainer).find('ul').animate({
                     left: ('-' + listPositionLeft + 'px')
-                }, 400);
-            } else if (leftSlideIndex == ($(baseContainer).find('ul li').length - 1)) {
+                }, localParams.slidingSpeed);
+            } else if (leftSlideIndex == (slides.length - 1)) {
                 var l = $(baseContainer).find('ul').position().left;
                 var l2 = l - 100;
                 $(baseContainer).find('ul').animate({
                     left: (l2 + 'px')
-                }, 400);
+                }, localParams.slidingSpeed);
                 $(baseContainer).find('ul').animate({
                     left: ('0px')
-                }, 200);
+                }, (localParams.slidingSpeed / slides.length));
                 leftSlideIndex = 0;
             }
         });
+        return this;
+    }
+
+    var slideLeft = function() {
+
+    }
+
+    var slideRight = function() {
+
     }
 })(jQuery);
