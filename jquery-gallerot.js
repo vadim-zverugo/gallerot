@@ -1,12 +1,13 @@
 (function($) {
-
-    var localParams;
+    var params;
     var baseContainer;
+    var slidesContainer;
     var slides;
-    var leftSlideIndex = 0;
+    var leftSlideIndex;
 
-    $.fn.gallerot = function(params) {
-        localParams = $.extend({
+    $.fn.gallerot = function(parameters) {
+        // Initialization
+        params = $.extend({
             width: null,
             height: null,
             leftControl : null,
@@ -14,24 +15,24 @@
             slidingSpeed: 500,
             enableAutoSliding: false,
             autoSlidingDelay: 4000
-        }, params);
-
-        /* Positioning and sizing
-        --------------------------------------------------------------------------------------------------------------*/
+        }, parameters);
         baseContainer = $(this);
-        var baseContainerParent = $(baseContainer).parent();
-        var baseContainerWidth = localParams.width != null ? localParams.width : baseContainerParent.innerWidth();
-        var baseContainerHeight = localParams.height != null ? localParams.height : baseContainerParent.innerHeight();
+        slidesContainer = $(baseContainer).find('ul');
+        slides = $(slidesContainer).find('li');
+        leftSlideIndex = 0;
+
+        // Positioning and sizing
+        var baseContainerWidth = params.width != null ? params.width : $(baseContainer).parent().innerWidth();
+        var baseContainerHeight = params.height != null ? params.height : $(baseContainer).parent().innerHeight();
         $(baseContainer).css({
             position: 'relative',
             width: (baseContainerWidth + 'px'),
             height: (baseContainerHeight + 'px'),
             margin: 0,
             padding: 0,
+            border: 'none',
             overflow: 'hidden'
         });
-
-        slides = $(baseContainer).find('ul li');
         var slidesOverallWidth = 0;
         $(slides).each(function() {
             slidesOverallWidth += $(this).width();
@@ -39,67 +40,70 @@
                 float: 'left',
                 listStyle: 'none',
                 margin: 0,
-                padding: 0
+                padding: 0,
+                border: 'none'
             });
         });
-        $(baseContainer).find('ul').css({
+        $(slidesContainer).css({
             position: 'relative',
             width: (slidesOverallWidth + 'px'),
             listStyle: 'none',
             margin: 0,
             padding: 0,
-            left: 0
+            border: 'none',
+            left: 0,
+            top: 0
         });
 
-        /* Action listeners
-        --------------------------------------------------------------------------------------------------------------*/
-        $(localParams.leftControl).bind('click', function() {
-            if (leftSlideIndex > 0) {
-                leftSlideIndex -= 1;
-                var listPositionLeft = 0;
-                $(slides).each(function(i, listItem) {
-                    if (i < leftSlideIndex) {
-                        listPositionLeft += $(listItem).width();
-                    }
-                });
-                $(baseContainer).find('ul').animate({
-                    left: ('-' + listPositionLeft + 'px')
-                }, localParams.slidingSpeed);
-            }
-        });
+        // Action listeners
+        $(params.leftControl).bind('click', slideLeft);
+        $(params.rightControl).bind('click', slideRight);
 
-        $(localParams.rightControl).bind('click', function() {
-            if (leftSlideIndex < (slides.length - 1)) {
-                leftSlideIndex += 1;
-                var listPositionLeft = 0;
-                $(baseContainer).find('ul li').each(function(i, listItem) {
-                    if (i < leftSlideIndex) {
-                        listPositionLeft += $(listItem).width();
-                    }
-                });
-                $(baseContainer).find('ul').animate({
-                    left: ('-' + listPositionLeft + 'px')
-                }, localParams.slidingSpeed);
-            } else if (leftSlideIndex == (slides.length - 1)) {
-                var l = $(baseContainer).find('ul').position().left;
-                var l2 = l - 100;
-                $(baseContainer).find('ul').animate({
-                    left: (l2 + 'px')
-                }, localParams.slidingSpeed);
-                $(baseContainer).find('ul').animate({
-                    left: ('0px')
-                }, (localParams.slidingSpeed / slides.length));
-                leftSlideIndex = 0;
-            }
-        });
+        if (params.enableAutoSliding) {
+            // TODO: Enable auto sliding using Timer.
+        }
         return this;
-    }
+    };
 
     var slideLeft = function() {
-
-    }
+        if (leftSlideIndex > 0) {
+            leftSlideIndex -= 1;
+            var slidersContainerLeft = 0;
+            $(slides).each(function(i, slide) {
+                if (i < leftSlideIndex) {
+                    slidersContainerLeft += $(slide).width();
+                }
+            });
+            moveSlidersContainer(slidersContainerLeft);
+        }
+    };
 
     var slideRight = function() {
+        if (leftSlideIndex < (slides.length - 1)) {
+            leftSlideIndex += 1;
+            var slidersContainerLeft = 0;
+            $(slides).each(function(i, listItem) {
+                if (i < leftSlideIndex) {
+                    slidersContainerLeft += $(listItem).width();
+                }
+            });
+            moveSlidersContainer(slidersContainerLeft);
+        } else if (leftSlideIndex == (slides.length - 1)) {
+            /*var l = $(slidesContainer).position().left;
+            var l2 = l - 100;
+            $(slidesContainer).animate({
+                left: (l2 + 'px')
+            }, params.slidingSpeed);
+            $(slidesContainer).animate({
+                left: ('0px')
+            }, (params.slidingSpeed / slides.length));
+            leftSlideIndex = 0;*/
+        }
+    };
 
-    }
+    var moveSlidersContainer = function(left) {
+        $(slidesContainer).animate({
+            left: ('-' + left + 'px')
+        }, params.slidingSpeed);
+    };
 })(jQuery);
