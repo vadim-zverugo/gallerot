@@ -1,9 +1,11 @@
 (function($) {
+
     var params;
     var baseContainer;
     var slidesContainer;
     var slides;
     var leftSlideIndex;
+    var autoSlidingIntervalId;
 
     $.fn.gallerot = function(parameters) {
         // Initialization
@@ -14,7 +16,9 @@
             rightControl : null,
             slidingSpeed: 500,
             enableAutoSliding: false,
-            autoSlidingDelay: 4000
+            autoSlidingInterval: 4000,
+            stopAutoSlidingOnHover: true,
+            autoSlidingDirection: 'right' // left or right
         }, parameters);
         baseContainer = $(this);
         slidesContainer = $(baseContainer).find('ul');
@@ -57,8 +61,14 @@
         $(params.leftControl).bind('click', slideLeft);
         $(params.rightControl).bind('click', slideRight);
 
+        // Auto sliding
         if (params.enableAutoSliding) {
-            // TODO: Enable auto sliding using jQuery.delay()
+            enableAutoSliding();
+            if (params.stopAutoSlidingOnHover) {
+                $(baseContainer).hover(disableAutoSliding, enableAutoSliding);
+            }
+            $(params.leftControl).hover(disableAutoSliding, enableAutoSliding);
+            $(params.rightControl).hover(disableAutoSliding, enableAutoSliding);
         }
         return this;
     };
@@ -67,6 +77,12 @@
         if (leftSlideIndex > 0) {
             leftSlideIndex -= 1;
             moveSlidesContainerTo(leftSlideIndex);
+        } else if (leftSlideIndex == 0) {
+            var slidesContainerLeft = $(slidesContainer).position().left;
+            var slidesContainerShiftLeft = slidesContainerLeft + ($(slides).first().width() / 2);
+            moveSlidesContainerOn(slidesContainerShiftLeft, (params.slidingSpeed / 2));
+            leftSlideIndex = slides.length - 1;
+            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed / 2));
         }
     };
 
@@ -79,8 +95,20 @@
             var slidesContainerShiftLeft = slidesContainerLeft - ($(slides).last().width() / 2);
             moveSlidesContainerOn(slidesContainerShiftLeft, (params.slidingSpeed / 2));
             leftSlideIndex = 0;
-            moveSlidesContainerTo(leftSlideIndex);
+            moveSlidesContainerTo(leftSlideIndex, params.slidingSpeed / 2);
         }
+    };
+
+    var enableAutoSliding = function() {
+        if (params.autoSlidingDirection == 'right') {
+            autoSlidingIntervalId = setInterval(slideRight, params.autoSlidingInterval);
+        } else if (params.autoSlidingDirection == 'left') {
+            autoSlidingIntervalId = setInterval(slideLeft, params.autoSlidingInterval);
+        }
+    };
+
+    var disableAutoSliding = function() {
+        clearInterval(autoSlidingIntervalId);
     };
 
     var moveSlidesContainerOn = function(leftPos, speed) {
