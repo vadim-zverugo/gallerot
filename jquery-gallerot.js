@@ -1,11 +1,10 @@
 (function($) {
-
     var params;
     var baseContainer;
     var slidesContainer;
     var slides;
     var leftSlideIndex;
-    var autoSlidingIntervalId;
+    var autoSlidingTimers;
 
     $.fn.gallerot = function(parameters) {
         // Initialization
@@ -16,7 +15,7 @@
             rightControl : null,
             slidingSpeed: 500,
             enableAutoSliding: false,
-            autoSlidingInterval: 4000,
+            autoSlidingDelay: 5000,
             stopAutoSlidingOnHover: true,
             autoSlidingDirection: 'right' // left or right
         }, parameters);
@@ -24,6 +23,7 @@
         slidesContainer = $(baseContainer).find('ul');
         slides = $(slidesContainer).find('li');
         leftSlideIndex = 0;
+        autoSlidingTimers = [];
 
         // Positioning and sizing
         var baseContainerWidth = params.width != null ? params.width : $(baseContainer).parent().width();
@@ -63,13 +63,14 @@
 
         // Auto sliding
         if (params.enableAutoSliding) {
-            enableAutoSliding();
+            startAutoSliding();
             if (params.stopAutoSlidingOnHover) {
-                $(baseContainer).hover(disableAutoSliding, enableAutoSliding);
+                $(baseContainer).hover(stopAutoSliding, startAutoSliding);
             }
-            $(params.leftControl).hover(disableAutoSliding, enableAutoSliding);
-            $(params.rightControl).hover(disableAutoSliding, enableAutoSliding);
+            $(params.leftControl).hover(stopAutoSliding, startAutoSliding);
+            $(params.rightControl).hover(stopAutoSliding, startAutoSliding);
         }
+
         return this;
     };
 
@@ -80,7 +81,7 @@
         } else if (leftSlideIndex == 0) {
             var slidesContainerLeft = $(slidesContainer).position().left;
             var slidesContainerShiftLeft = slidesContainerLeft + ($(slides).first().width() / 2);
-            moveSlidesContainerOn(slidesContainerShiftLeft, (params.slidingSpeed / 2));
+            moveSlidesContainerOn(slidesContainerShiftLeft);
             leftSlideIndex = slides.length - 1;
             moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed / 2));
         }
@@ -93,22 +94,42 @@
         } else if (leftSlideIndex == (slides.length - 1)) {
             var slidesContainerLeft = $(slidesContainer).position().left;
             var slidesContainerShiftLeft = slidesContainerLeft - ($(slides).last().width() / 2);
-            moveSlidesContainerOn(slidesContainerShiftLeft, (params.slidingSpeed / 2));
+            moveSlidesContainerOn(slidesContainerShiftLeft);
             leftSlideIndex = 0;
             moveSlidesContainerTo(leftSlideIndex, params.slidingSpeed / 2);
         }
     };
 
-    var enableAutoSliding = function() {
-        if (params.autoSlidingDirection == 'right') {
-            autoSlidingIntervalId = setInterval(slideRight, params.autoSlidingInterval);
-        } else if (params.autoSlidingDirection == 'left') {
-            autoSlidingIntervalId = setInterval(slideLeft, params.autoSlidingInterval);
+    var startAutoSliding = function() {
+        if (params.autoSlidingDirection == 'left') {
+            startLeftAutoSliding();
+        } else if (params.autoSlidingDirection == 'right') {
+            startRightAutoSliding();
         }
     };
 
-    var disableAutoSliding = function() {
-        clearInterval(autoSlidingIntervalId);
+    var stopAutoSliding = function() {
+        for (var i = 0; i < autoSlidingTimers.length; i++) {
+            clearTimeout(autoSlidingTimers[i]);
+        }
+    };
+
+    var startLeftAutoSliding = function() {
+        stopAutoSliding();
+        var autoSlidingTimer = setTimeout(function() {
+            slideLeft();
+            startLeftAutoSliding();
+        }, params.autoSlidingDelay);
+        autoSlidingTimers.push(autoSlidingTimer);
+    };
+
+    var startRightAutoSliding = function() {
+        stopAutoSliding();
+        var autoSlidingTimer = setTimeout(function() {
+            slideRight();
+            startRightAutoSliding();
+        }, params.autoSlidingDelay);
+        autoSlidingTimers.push(autoSlidingTimer);
     };
 
     var moveSlidesContainerOn = function(leftPos, speed) {
