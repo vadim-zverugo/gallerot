@@ -149,6 +149,10 @@
                 slidersContainerLeft += $(slide).width();
             }
         });
-        $(slidesContainer).animate({left: -slidersContainerLeft}, speed);
+        moveSlidesContainerOn(-slidersContainerLeft, speed);
     };
+
+    $.easing.sliding = function(progress, millisecondsSince, startValue, endValue, totalDuration) {
+        // TODO: Implement...
+    }
 })(jQuery);
