@@ -136,7 +136,7 @@
         if (speed === undefined) {
             speed = params.slidingSpeed;
         }
-        $(slidesContainer).animate({left: leftPos}, speed);
+        $(slidesContainer).animate({left: leftPos}, speed, 'sliding');
     };
 
     var moveSlidesContainerTo = function(slideIndex, speed) {
@@ -152,7 +152,7 @@
         moveSlidesContainerOn(-slidersContainerLeft, speed);
     };
 
-    $.easing.sliding = function(progress, millisecondsSince, startValue, endValue, totalDuration) {
-        // TODO: Implement...
+    $.easing.sliding = function(x, t, b, c, d) {
+        return c*(t/=d)*t*t*t + b;
     }
 })(jQuery);
