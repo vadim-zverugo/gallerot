@@ -3,11 +3,12 @@
     var baseContainer;
     var slidesContainer;
     var slides;
+    var leftSlidingControl;
+    var rightSlidingControl;
     var leftSlideIndex;
     var autoSlidingTimers;
 
     $.fn.gallerot = function(parameters) {
-        // Initialization
         params = $.extend({
             width: null,
             height: null,
@@ -20,23 +21,20 @@
             autoSlidingDirection: 'right' // left or right
         }, parameters);
         baseContainer = $(this);
-        slidesContainer = $(baseContainer).find('ul');
-        slides = $(slidesContainer).find('li');
+        slidesContainer = baseContainer.find('ul');
+        slides = slidesContainer.find('li');
+        leftSlidingControl = $(params.leftControl);
+        rightSlidingControl = $(params.rightControl);
         leftSlideIndex = 0;
         autoSlidingTimers = [];
 
-        // Positioning and sizing
         var baseContainerWidth = params.width != null ? params.width : $(baseContainer).parent().width();
         var baseContainerHeight = params.height != null ? params.height : $(baseContainer).parent().height();
-        $(baseContainer).css({
-            position: 'relative',
+        baseContainer.css({
             width: baseContainerWidth,
-            height: baseContainerHeight,
-            margin: 0,
-            padding: 0,
-            border: 'none',
-            overflow: 'hidden'
+            height: baseContainerHeight
         });
+        baseContainer.addClass('gallerot-container');
         var slidesOverallWidth = 0;
         $(slides).each(function() {
             slidesOverallWidth += $(this).width();
@@ -57,7 +55,6 @@
             border: 'none'
         });
 
-        // Action listeners
         $(params.leftControl).bind('click', slideLeft);
         $(params.rightControl).bind('click', slideRight);
 

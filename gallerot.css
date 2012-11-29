@@ -1,0 +1,24 @@
+.gallerot-container {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+}
+
+/*
+.gallerot-container > ul {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border: none;
+}
+
+.gallerot-container > ul > li {
+    float: left;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}*/
