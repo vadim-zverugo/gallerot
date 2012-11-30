@@ -30,10 +30,6 @@
 .slider-container .slide-box .picture {
 }
 
-.slider-container .slide-box .picture img {
-    height: 200px;
-}
-
 .slider-container .slide-box .caption {
     position: absolute;
     bottom: 0;

@@ -3,6 +3,7 @@
     var baseContainer;       // Container that contains list (<div>).
     var slidesContainer;     // Container that contains all items of list (<ul>).
     var slides;              // All items of the list (<li>).
+    var slidesWidthCache;    // Contains width of each slide.
     var leftSlidingControl;  // Control for sliding to left.
     var rightSlidingControl; // Control for sliding to right.
     var leftSlideIndex;      // Current index of the left visible slide.
@@ -27,6 +28,7 @@
         rightSlidingControl = $(params.rightControl);
         leftSlideIndex = 0;
         autoSlidingTimers = [];
+        slidesWidthCache = {};
 
         // Positioning and sizing.
         baseContainer.addClass('gallerot-container');
@@ -34,9 +36,9 @@
         baseContainer.height(params.height != null ? params.height : baseContainer.parent().height());
         var slidesOverallWidth = 0;
         for (var i = 0; i < slides.length; i++) {
-            var slide = $(slides[i]);
-            slidesOverallWidth += slide.width();
-            slide.css('float', 'left');
+            var slideWidth = $(slides[i]).width();
+            slidesWidthCache[i] = slideWidth;
+            slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
 
@@ -59,21 +61,17 @@
 
     var slideLeft = function() {
         if (leftSlideIndex > 0) {
-            leftSlideIndex -= 1;
-            moveSlidesContainerTo(leftSlideIndex);
+            moveSlidesContainerTo(leftSlideIndex - 1);
         } else if (leftSlideIndex == 0) {
-            leftSlideIndex = slides.length - 1;
-            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
     var slideRight = function() {
         if (leftSlideIndex < (slides.length - 1)) {
-            leftSlideIndex += 1;
-            moveSlidesContainerTo(leftSlideIndex);
+            moveSlidesContainerTo(leftSlideIndex + 1);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            leftSlideIndex = 0;
-            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(0, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
@@ -113,12 +111,12 @@
         if (speed === undefined) speed = params.slidingSpeed;
         if (easing === undefined) easing = easingSlidingFunc;
         var slidersContainerLeft = 0;
-        // TODO: Cache position of each slide after calculation.
         for (var i = 0; i < slides.length; i++) {
             if (i < slideIndex) {
-                slidersContainerLeft += $(slides[i]).width();
+                slidersContainerLeft += slidesWidthCache[i];
             }
         }
+        leftSlideIndex = slideIndex;
         slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
 
