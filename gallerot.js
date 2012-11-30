@@ -1,12 +1,12 @@
 (function($) {
-    var params;
-    var baseContainer;
-    var slidesContainer;
-    var slides;
-    var leftSlidingControl;
-    var rightSlidingControl;
-    var leftSlideIndex;
-    var autoSlidingTimers;
+    var params;              // Initial parameters.
+    var baseContainer;       // Container that contains list (<div>).
+    var slidesContainer;     // Container that contains all items of list (<ul>).
+    var slides;              // All items of the list (<li>).
+    var leftSlidingControl;  // Control for sliding to left.
+    var rightSlidingControl; // Control for sliding to right.
+    var leftSlideIndex;      // Current index of the left visible slide.
+    var autoSlidingTimers;   // Timers with auto-sliding actions.
 
     $.fn.gallerot = function(parameters) {
         params = $.extend({
@@ -21,51 +21,37 @@
             autoSlidingDirection: 'right' // left or right
         }, parameters);
         baseContainer = $(this);
-        slidesContainer = baseContainer.find('ul');
-        slides = slidesContainer.find('li');
+        slidesContainer = baseContainer.children('ul');
+        slides = slidesContainer.children('li');
         leftSlidingControl = $(params.leftControl);
         rightSlidingControl = $(params.rightControl);
         leftSlideIndex = 0;
         autoSlidingTimers = [];
 
-        var baseContainerWidth = params.width != null ? params.width : $(baseContainer).parent().width();
-        var baseContainerHeight = params.height != null ? params.height : $(baseContainer).parent().height();
-        baseContainer.css({
-            width: baseContainerWidth,
-            height: baseContainerHeight
-        });
+        // Positioning and sizing.
         baseContainer.addClass('gallerot-container');
+        baseContainer.width(params.width != null ? params.width : baseContainer.parent().width());
+        baseContainer.height(params.height != null ? params.height : baseContainer.parent().height());
         var slidesOverallWidth = 0;
-        $(slides).each(function() {
-            slidesOverallWidth += $(this).width();
-            $(this).css({
-                float: 'left',
-                listStyle: 'none',
-                margin: 0,
-                padding: 0,
-                border: 'none'
-            });
-        });
-        $(slidesContainer).css({
-            position: 'relative',
-            width: slidesOverallWidth,
-            listStyle: 'none',
-            margin: 0,
-            padding: 0,
-            border: 'none'
-        });
+        for (var i = 0; i < slides.length; i++) {
+            var slide = $(slides[i]);
+            slidesOverallWidth += slide.width();
+            slide.css('float', 'left');
+        }
+        slidesContainer.width(slidesOverallWidth);
 
-        $(params.leftControl).bind('click', slideLeft);
-        $(params.rightControl).bind('click', slideRight);
+        // Action listeners
+        leftSlidingControl.bind('click', slideLeft);
+        rightSlidingControl.bind('click', slideRight);
 
         // Auto sliding
         if (params.enableAutoSliding) {
             startAutoSliding();
             if (params.stopAutoSlidingOnHover) {
-                $(baseContainer).hover(stopAutoSliding, startAutoSliding);
+                baseContainer.hover(stopAutoSliding, startAutoSliding);
             }
-            $(params.leftControl).hover(stopAutoSliding, startAutoSliding);
-            $(params.rightControl).hover(stopAutoSliding, startAutoSliding);
+            leftSlidingControl.hover(stopAutoSliding, startAutoSliding);
+            rightSlidingControl.hover(stopAutoSliding, startAutoSliding);
         }
 
         return this;
@@ -76,11 +62,8 @@
             leftSlideIndex -= 1;
             moveSlidesContainerTo(leftSlideIndex);
         } else if (leftSlideIndex == 0) {
-            var slidesContainerLeft = $(slidesContainer).position().left;
-            var slidesContainerShiftLeft = slidesContainerLeft + ($(slides).first().width() / 2);
-            moveSlidesContainerOn(slidesContainerShiftLeft);
             leftSlideIndex = slides.length - 1;
-            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed / 2));
+            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), 'glrtRewinding');
         }
     };
 
@@ -89,11 +72,8 @@
             leftSlideIndex += 1;
             moveSlidesContainerTo(leftSlideIndex);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            var slidesContainerLeft = $(slidesContainer).position().left;
-            var slidesContainerShiftLeft = slidesContainerLeft - ($(slides).last().width() / 2);
-            moveSlidesContainerOn(slidesContainerShiftLeft);
             leftSlideIndex = 0;
-            moveSlidesContainerTo(leftSlideIndex, params.slidingSpeed / 2);
+            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), 'glrtRewinding');
         }
     };
 
@@ -129,27 +109,32 @@
         autoSlidingTimers.push(autoSlidingTimer);
     };
 
-    var moveSlidesContainerOn = function(leftPos, speed) {
-        if (speed === undefined) {
-            speed = params.slidingSpeed;
-        }
-        $(slidesContainer).animate({left: leftPos}, speed, 'sliding');
+    var moveSlidesContainerOn = function(leftPos, speed, easing) {
+        if (speed === undefined) speed = params.slidingSpeed;
+        if (easing === undefined) easing = 'glrtSliding';
+        slidesContainer.animate({left: leftPos}, speed, easing);
     };
 
-    var moveSlidesContainerTo = function(slideIndex, speed) {
-        if (speed === undefined) {
-            speed = params.slidingSpeed;
-        }
+    var moveSlidesContainerTo = function(slideIndex, speed, easing) {
+        if (speed === undefined) speed = params.slidingSpeed;
+        if (easing === undefined) easing = 'glrtSliding';
         var slidersContainerLeft = 0;
-        $(slides).each(function(i, slide) {
+        slides.each(function(i, slide) {
             if (i < slideIndex) {
                 slidersContainerLeft += $(slide).width();
             }
         });
-        moveSlidesContainerOn(-slidersContainerLeft, speed);
+        moveSlidesContainerOn(-slidersContainerLeft, speed, easing);
     };
 
-    $.easing.sliding = function(x, t, b, c, d) {
-        return c*(t/=d)*t*t*t + b;
-    }
+    $.easing.glrtSliding = function(x, t, b, c, d) {
+        if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
+        return c / 2 * ((t -= 2) * t * t + 2) + b;
+    };
+
+    $.easing.glrtRewinding = function(x, t, b, c, d, s) {
+        if (s == undefined) s = 1.70158;
+        if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
+        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
+    };
 })(jQuery);

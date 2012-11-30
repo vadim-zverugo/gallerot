@@ -18,6 +18,8 @@
 
 .slider-container {
     float: left;
+    width: 1000px;
+    height: 200px;
 }
 
 .slider-container .slide-box {
