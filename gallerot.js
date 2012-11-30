@@ -109,22 +109,17 @@
         autoSlidingTimers.push(autoSlidingTimer);
     };
 
-    var moveSlidesContainerOn = function(leftPos, speed, easing) {
-        if (speed === undefined) speed = params.slidingSpeed;
-        if (easing === undefined) easing = easingSlidingFunc;
-        slidesContainer.animate({left: leftPos}, speed, easing);
-    };
-
     var moveSlidesContainerTo = function(slideIndex, speed, easing) {
         if (speed === undefined) speed = params.slidingSpeed;
         if (easing === undefined) easing = easingSlidingFunc;
         var slidersContainerLeft = 0;
+        // TODO: Cache position of each slide after calculation.
         for (var i = 0; i < slides.length; i++) {
             if (i < slideIndex) {
                 slidersContainerLeft += $(slides[i]).width();
             }
         }
-        moveSlidesContainerOn(-slidersContainerLeft, speed, easing);
+        slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
 
     var easingSlidingFunc = 'glrtSliding';
