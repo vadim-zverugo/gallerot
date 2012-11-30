@@ -63,7 +63,7 @@
             moveSlidesContainerTo(leftSlideIndex);
         } else if (leftSlideIndex == 0) {
             leftSlideIndex = slides.length - 1;
-            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), 'glrtRewinding');
+            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
@@ -73,7 +73,7 @@
             moveSlidesContainerTo(leftSlideIndex);
         } else if (leftSlideIndex == (slides.length - 1)) {
             leftSlideIndex = 0;
-            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), 'glrtRewinding');
+            moveSlidesContainerTo(leftSlideIndex, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
@@ -111,27 +111,29 @@
 
     var moveSlidesContainerOn = function(leftPos, speed, easing) {
         if (speed === undefined) speed = params.slidingSpeed;
-        if (easing === undefined) easing = 'glrtSliding';
+        if (easing === undefined) easing = easingSlidingFunc;
         slidesContainer.animate({left: leftPos}, speed, easing);
     };
 
     var moveSlidesContainerTo = function(slideIndex, speed, easing) {
         if (speed === undefined) speed = params.slidingSpeed;
-        if (easing === undefined) easing = 'glrtSliding';
+        if (easing === undefined) easing = easingSlidingFunc;
         var slidersContainerLeft = 0;
-        slides.each(function(i, slide) {
+        for (var i = 0; i < slides.length; i++) {
             if (i < slideIndex) {
-                slidersContainerLeft += $(slide).width();
+                slidersContainerLeft += $(slides[i]).width();
             }
-        });
+        }
         moveSlidesContainerOn(-slidersContainerLeft, speed, easing);
     };
 
+    var easingSlidingFunc = 'glrtSliding';
     $.easing.glrtSliding = function(x, t, b, c, d) {
         if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     };
 
+    var easingRewindingFunc = 'glrtRewinding';
     $.easing.glrtRewinding = function(x, t, b, c, d, s) {
         if (s == undefined) s = 1.70158;
         if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
