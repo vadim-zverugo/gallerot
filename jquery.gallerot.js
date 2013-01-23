@@ -60,6 +60,7 @@
     };
 
     var slideLeft = function() {
+        if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex > 0) {
             moveSlidesContainerTo(leftSlideIndex - 1);
         } else if (leftSlideIndex == 0) {
@@ -68,6 +69,7 @@
     };
 
     var slideRight = function() {
+        if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex < (slides.length - 1)) {
             moveSlidesContainerTo(leftSlideIndex + 1);
         } else if (leftSlideIndex == (slides.length - 1)) {
