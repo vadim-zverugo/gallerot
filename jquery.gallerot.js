@@ -19,7 +19,9 @@
             enableAutoSliding: false,
             autoSlidingDelay: 5000,
             stopAutoSlidingOnHover: true,
-            autoSlidingDirection: 'right' // left or right
+            autoSlidingDirection: 'right', // left or right
+            slideEasing: easingSlidingFunc,
+            rewindEasing: easingRewindingFunc
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
@@ -41,6 +43,13 @@
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
+        /* CSS3 plans
+        slidesContainer.css({'transition': 'left 1s'});
+        slidesContainer.css({'-moz-transition': 'left 1s'});
+        slidesContainer.css({'-ms-transition': 'left 1s'});
+        slidesContainer.css({'-webkit-transition': 'left 1s'});
+        slidesContainer.css({'-o-transition': 'left 1s'});
+        */
 
         // Action listeners
         leftSlidingControl.bind('click', slideLeft);
@@ -62,18 +71,18 @@
     var slideLeft = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex > 0) {
-            moveSlidesContainerTo(leftSlideIndex - 1);
+            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, params.slideEasing);
         } else if (leftSlideIndex == 0) {
-            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), params.rewindEasing);
         }
     };
 
     var slideRight = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex < (slides.length - 1)) {
-            moveSlidesContainerTo(leftSlideIndex + 1);
+            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, params.slideEasing);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            moveSlidesContainerTo(0, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(0, (params.slidingSpeed * 3), params.rewindEasing);
         }
     };
 
@@ -110,8 +119,6 @@
     };
 
     var moveSlidesContainerTo = function(slideIndex, speed, easing) {
-        if (speed === undefined) speed = params.slidingSpeed;
-        if (easing === undefined) easing = easingSlidingFunc;
         var slidersContainerLeft = 0;
         for (var i = 0; i < slides.length; i++) {
             if (i < slideIndex) {
@@ -119,6 +126,8 @@
             }
         }
         leftSlideIndex = slideIndex;
+        // CSS3 plans
+        //slidesContainer.css({left: -slidersContainerLeft});
         slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
 
