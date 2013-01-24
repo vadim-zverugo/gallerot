@@ -19,9 +19,7 @@
             enableAutoSliding: false,
             autoSlidingDelay: 5000,
             stopAutoSlidingOnHover: true,
-            autoSlidingDirection: 'right', // left or right
-            slideEasing: easingSlidingFunc,
-            rewindEasing: easingRewindingFunc
+            autoSlidingDirection: 'right' // left or right
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
@@ -43,13 +41,13 @@
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
-        /* CSS3 plans
-        slidesContainer.css({'transition': 'left 1s'});
-        slidesContainer.css({'-moz-transition': 'left 1s'});
-        slidesContainer.css({'-ms-transition': 'left 1s'});
-        slidesContainer.css({'-webkit-transition': 'left 1s'});
-        slidesContainer.css({'-o-transition': 'left 1s'});
-        */
+        // CSS3 animation
+        /*var slidingSpeedCss3 = String(params.slidingSpeed / 1000) + "s";
+        slidesContainer.css({'transition':slidingSpeedCss3});
+        slidesContainer.css({'-moz-transition':slidingSpeedCss3});
+        slidesContainer.css({'-ms-transition':slidingSpeedCss3});
+        slidesContainer.css({'-webkit-transition':slidingSpeedCss3});
+        slidesContainer.css({'-o-transition':slidingSpeedCss3});*/
 
         // Action listeners
         leftSlidingControl.bind('click', slideLeft);
@@ -71,18 +69,18 @@
     var slideLeft = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex > 0) {
-            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, params.slideEasing);
+            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, easingSlidingFunc);
         } else if (leftSlideIndex == 0) {
-            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), params.rewindEasing);
+            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
     var slideRight = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex < (slides.length - 1)) {
-            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, params.slideEasing);
+            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, easingSlidingFunc);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            moveSlidesContainerTo(0, (params.slidingSpeed * 3), params.rewindEasing);
+            moveSlidesContainerTo(0, (params.slidingSpeed * 3), easingRewindingFunc);
         }
     };
 
@@ -126,7 +124,6 @@
             }
         }
         leftSlideIndex = slideIndex;
-        // CSS3 plans
         //slidesContainer.css({left: -slidersContainerLeft});
         slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
