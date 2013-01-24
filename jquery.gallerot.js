@@ -19,7 +19,9 @@
             enableAutoSliding: false,
             autoSlidingDelay: 5000,
             stopAutoSlidingOnHover: true,
-            autoSlidingDirection: 'right' // left or right
+            autoSlidingDirection: 'right', // left or right
+            easingSlide: 'glrtSliding',
+            easingRewind: 'glrtRewinding'
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
@@ -29,15 +31,6 @@
         leftSlideIndex = 0;
         autoSlidingTimers = [];
         slidesWidthCache = {};
-
-        /*window.requestAnimFrame = window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            window.oRequestAnimationFrame ||
-            window.msRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, params.autoSlidingDelay);
-            };*/
 
         // Positioning and sizing.
         baseContainer.addClass('gallerot-container');
@@ -50,8 +43,8 @@
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
-        // CSS3 animation
-        /*var slidingSpeedCss3 = String(params.slidingSpeed / 1000) + "s";
+        /* CSS3 animation. Plan on the future.
+        var slidingSpeedCss3 = String(params.slidingSpeed / 1000) + "s";
         slidesContainer.css({'transition':slidingSpeedCss3});
         slidesContainer.css({'-moz-transition':slidingSpeedCss3});
         slidesContainer.css({'-ms-transition':slidingSpeedCss3});
@@ -64,12 +57,12 @@
 
         // Auto sliding
         if (params.enableAutoSliding) {
-            startAutoSliding();
             if (params.stopAutoSlidingOnHover) {
                 baseContainer.hover(stopAutoSliding, startAutoSliding);
             }
             leftSlidingControl.hover(stopAutoSliding, startAutoSliding);
             rightSlidingControl.hover(stopAutoSliding, startAutoSliding);
+            startAutoSliding();
         }
 
         return this;
@@ -78,18 +71,18 @@
     var slideLeft = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex > 0) {
-            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, easingSlidingFunc);
+            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, params.easingSlide);
         } else if (leftSlideIndex == 0) {
-            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), params.easingRewind);
         }
     };
 
     var slideRight = function() {
         if (params.enableAutoSliding) stopAutoSliding();
         if (leftSlideIndex < (slides.length - 1)) {
-            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, easingSlidingFunc);
+            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, params.easingSlide);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            moveSlidesContainerTo(0, (params.slidingSpeed * 3), easingRewindingFunc);
+            moveSlidesContainerTo(0, (params.slidingSpeed * 3), params.easingRewind);
         }
     };
 
@@ -108,8 +101,6 @@
     };
 
     var startLeftAutoSliding = function() {
-        //requestAnimFrame(startLeftAutoSliding);
-        slideLeft();
         stopAutoSliding();
         var autoSlidingTimer = setTimeout(function() {
             slideLeft();
@@ -119,8 +110,6 @@
     };
 
     var startRightAutoSliding = function() {
-        //requestAnimFrame(startRightAutoSliding);
-        slideRight();
         stopAutoSliding();
         var autoSlidingTimer = setTimeout(function() {
             slideRight();
@@ -137,17 +126,14 @@
             }
         }
         leftSlideIndex = slideIndex;
-        //slidesContainer.css({left: -slidersContainerLeft});
-        slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
+        slidesContainer.animate({marginLeft: -slidersContainerLeft}, speed, easing);
     };
 
-    var easingSlidingFunc = 'glrtSliding';
     $.easing.glrtSliding = function(x, t, b, c, d) {
         if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
         return c / 2 * ((t -= 2) * t * t + 2) + b;
     };
 
-    var easingRewindingFunc = 'glrtRewinding';
     $.easing.glrtRewinding = function(x, t, b, c, d, s) {
         if (s == undefined) s = 1.70158;
         if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
