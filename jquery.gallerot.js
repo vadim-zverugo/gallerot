@@ -30,6 +30,15 @@
         autoSlidingTimers = [];
         slidesWidthCache = {};
 
+        /*window.requestAnimFrame = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, params.autoSlidingDelay);
+            };*/
+
         // Positioning and sizing.
         baseContainer.addClass('gallerot-container');
         baseContainer.width(params.width != null ? params.width : baseContainer.parent().width());
@@ -99,6 +108,8 @@
     };
 
     var startLeftAutoSliding = function() {
+        //requestAnimFrame(startLeftAutoSliding);
+        slideLeft();
         stopAutoSliding();
         var autoSlidingTimer = setTimeout(function() {
             slideLeft();
@@ -108,6 +119,8 @@
     };
 
     var startRightAutoSliding = function() {
+        //requestAnimFrame(startRightAutoSliding);
+        slideRight();
         stopAutoSliding();
         var autoSlidingTimer = setTimeout(function() {
             slideRight();
