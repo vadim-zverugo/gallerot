@@ -126,7 +126,7 @@
             }
         }
         leftSlideIndex = slideIndex;
-        slidesContainer.animate({marginLeft: -slidersContainerLeft}, speed, easing);
+        slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
 
     $.easing.glrtSliding = function(x, t, b, c, d) {
