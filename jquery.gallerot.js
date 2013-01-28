@@ -7,7 +7,7 @@
     var leftSlidingControl;      // Control for sliding to left.
     var rightSlidingControl;     // Control for sliding to right.
     var leftSlideIndex;          // Current index of the left visible slide.
-    var currentAutoSlidingTimer; // Current timer.
+    var currentAutoSlidingTimer; // Current timer for auto-sliding.
 
     var vendors = ['moz', 'ms', 'o', 'webkit'];
 
@@ -17,13 +17,11 @@
             height: null,
             leftControl : null,
             rightControl : null,
-            slidingSpeed: 500,
+            slidingSpeed: 1000,
             enableAutoSliding: false,
             autoSlidingDelay: 5000,
             stopAutoSlidingOnHover: true,
-            autoSlidingDirection: 'right', // left or right
-            easingSlide: 'easeInOutCubic',
-            easingRewind: 'easeInOutBack'
+            autoSlidingDirection: 'right' // left or right
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
@@ -44,7 +42,8 @@
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
-        slidesContainer.css(crossCssRule('transition', 'left 1s'));
+        var slidingSpeed = (params.slidingSpeed / 1000) + 's';
+        slidesContainer.css(crossCssRule('transition', ('left ' + slidingSpeed)));
 
         // Action listeners
         leftSlidingControl.bind('click', slideLeft);
@@ -65,17 +64,17 @@
 
     var slideLeft = function() {
         if (leftSlideIndex > 0) {
-            moveSlidesContainerTo(leftSlideIndex - 1, params.slidingSpeed, params.easingSlide);
+            moveSlidesContainerTo(leftSlideIndex - 1);
         } else if (leftSlideIndex == 0) {
-            moveSlidesContainerTo(slides.length - 1, (params.slidingSpeed * 3), params.easingRewind);
+            moveSlidesContainerTo(slides.length - 1);
         }
     };
 
     var slideRight = function() {
         if (leftSlideIndex < (slides.length - 1)) {
-            moveSlidesContainerTo(leftSlideIndex + 1, params.slidingSpeed, params.easingSlide);
+            moveSlidesContainerTo(leftSlideIndex + 1);
         } else if (leftSlideIndex == (slides.length - 1)) {
-            moveSlidesContainerTo(0, (params.slidingSpeed * 3), params.easingRewind);
+            moveSlidesContainerTo(0);
         }
     };
 
@@ -107,7 +106,7 @@
         }, params.autoSlidingDelay);
     };
 
-    var moveSlidesContainerTo = function(slideIndex, speed, easing) {
+    var moveSlidesContainerTo = function(slideIndex) {
         var slidersContainerLeft = 0;
         for (var i = 0; i < slides.length; i++) {
             if (i < slideIndex) {
@@ -116,7 +115,6 @@
         }
         leftSlideIndex = slideIndex;
         slidesContainer.css({left: -slidersContainerLeft});
-        //slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
     };
 
     var crossCssRule = function(property, value) {
@@ -126,16 +124,5 @@
             cssRules[vendor + property] = value;
         }
         return cssRules;
-    };
-
-    $.easing.easeInOutCubic = function(x, t, b, c, d) {
-        if ((t /= d / 2) < 1) return c / 2 * t * t * t + b;
-        return c / 2 * ((t -= 2) * t * t + 2) + b;
-    };
-
-    $.easing.easeInOutBack = function(x, t, b, c, d, s) {
-        if (s == undefined) s = 1.70158;
-        if ((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.525)) + 1) * t - s)) + b;
-        return c / 2 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2) + b;
     };
 })(jQuery);
