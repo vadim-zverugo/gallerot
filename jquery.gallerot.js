@@ -9,6 +9,8 @@
     var leftSlideIndex;          // Current index of the left visible slide.
     var currentAutoSlidingTimer; // Current timer.
 
+    var vendors = ['moz', 'ms', 'o', 'webkit'];
+
     $.fn.gallerot = function(parameters) {
         params = $.extend({
             width: null,
@@ -42,6 +44,7 @@
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
+        slidesContainer.css(crossCssRule('transition', 'left 1s'));
 
         // Action listeners
         leftSlidingControl.bind('click', slideLeft);
@@ -112,7 +115,17 @@
             }
         }
         leftSlideIndex = slideIndex;
-        slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
+        slidesContainer.css({left: -slidersContainerLeft});
+        //slidesContainer.animate({left: -slidersContainerLeft}, speed, easing);
+    };
+
+    var crossCssRule = function(property, value) {
+        var cssRules = {};
+        cssRules[property] = value;
+        for (var vendor in vendors) {
+            cssRules[vendor + property] = value;
+        }
+        return cssRules;
     };
 
     $.easing.easeInOutCubic = function(x, t, b, c, d) {
