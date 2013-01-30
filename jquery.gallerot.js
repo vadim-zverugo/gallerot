@@ -3,7 +3,8 @@
     var baseContainer;           // Container that contains list (<div>).
     var slidesContainer;         // Container that contains all items of list (<ul>).
     var slides;                  // All items of the list (<li>).
-    var slidesWidthCache;        // Contains width of each slide.
+    var slidesWidth;             // Contains width of each list item.
+    var slidesLeftPos;           // Contains left position of each list item.
     var leftSlidingControl;      // Control for sliding to left.
     var rightSlidingControl;     // Control for sliding to right.
     var leftSlideIndex;          // Current index of the left visible slide.
@@ -19,9 +20,8 @@
             rightControl : null,
             slidingSpeed: 1000,
             enableAutoSliding: false,
-            autoSlidingDelay: 5000,
-            stopAutoSlidingOnHover: true,
-            autoSlidingDirection: 'right' // left or right
+            autoSlidingDelay: 6000,
+            stopAutoSlidingOnHover: true
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
@@ -29,7 +29,8 @@
         leftSlidingControl = $(params.leftControl);
         rightSlidingControl = $(params.rightControl);
         leftSlideIndex = 0;
-        slidesWidthCache = {};
+        slidesWidth = {};
+        slidesLeftPos = {};
 
         // Positioning and sizing.
         baseContainer.addClass('gallerot-container');
@@ -38,10 +39,12 @@
         var slidesOverallWidth = 0;
         for (var i = 0; i < slides.length; i++) {
             var slideWidth = $(slides[i]).width();
-            slidesWidthCache[i] = slideWidth;
+            slidesWidth[i] = slideWidth;
+            slidesLeftPos[i] = slidesOverallWidth;
             slidesOverallWidth += slideWidth;
         }
         slidesContainer.width(slidesOverallWidth);
+        // CSS3 animation.
         var slidingSpeed = (params.slidingSpeed / 1000) + 's';
         slidesContainer.css(crossCssRule('transition', ('left ' + slidingSpeed)));
 
@@ -79,42 +82,21 @@
     };
 
     var startAutoSliding = function() {
-        if (params.autoSlidingDirection == 'left') {
-            startLeftAutoSliding();
-        } else if (params.autoSlidingDirection == 'right') {
-            startRightAutoSliding();
-        }
+        stopAutoSliding();
+        currentAutoSlidingTimer = setTimeout(function() {
+            slideLeft();
+            startAutoSliding();
+        }, params.autoSlidingDelay);
     };
 
     var stopAutoSliding = function() {
         clearTimeout(currentAutoSlidingTimer);
     };
 
-    var startLeftAutoSliding = function() {
-        stopAutoSliding();
-        currentAutoSlidingTimer = setTimeout(function() {
-            slideLeft();
-            startLeftAutoSliding();
-        }, params.autoSlidingDelay);
-    };
-
-    var startRightAutoSliding = function() {
-        stopAutoSliding();
-        currentAutoSlidingTimer = setTimeout(function() {
-            slideRight();
-            startRightAutoSliding();
-        }, params.autoSlidingDelay);
-    };
-
     var moveSlidesContainerTo = function(slideIndex) {
-        var slidersContainerLeft = 0;
-        for (var i = 0; i < slides.length; i++) {
-            if (i < slideIndex) {
-                slidersContainerLeft += slidesWidthCache[i];
-            }
-        }
+        var slidesContainerLeft = slidesLeftPos[slideIndex];
         leftSlideIndex = slideIndex;
-        slidesContainer.css({left: -slidersContainerLeft});
+        slidesContainer.css({left: -slidesContainerLeft});
     };
 
     var crossCssRule = function(property, value) {
