@@ -8,9 +8,9 @@
     var leftSlidingControl;      // Control for sliding to left.
     var rightSlidingControl;     // Control for sliding to right.
     var leftSlideIndex;          // Current index of the left visible slide.
-    var currentAutoSlidingTimer; // Current timer for auto-sliding.
+    var curAutoSlidingTimer;     // Current timer for auto-sliding.
 
-    var vendors = ['moz', 'ms', 'o', 'webkit'];
+    var vendors = ['-moz-', '-ms-', '-o-', '-webkit-'];
 
     $.fn.gallerot = function(parameters) {
         params = $.extend({
@@ -46,7 +46,7 @@
         slidesContainer.width(slidesOverallWidth);
         // CSS3 animation.
         var slidingSpeed = (params.slidingSpeed / 1000) + 's';
-        slidesContainer.css(crossCssRule('transition', ('left ' + slidingSpeed)));
+        slidesContainer.css(crossCssRule('transition', ('left ' + slidingSpeed + ' ease 0s')));
 
         // Action listeners
         leftSlidingControl.bind('click', slideLeft);
@@ -65,12 +65,12 @@
         return this;
     };
 
-    var slideLeft = function() {
-        if (leftSlideIndex > 0) {
-            moveSlidesContainerTo(leftSlideIndex - 1);
-        } else if (leftSlideIndex == 0) {
-            moveSlidesContainerTo(slides.length - 1);
-        }
+        var slideLeft = function() {
+            if (leftSlideIndex > 0) {
+                moveSlidesContainerTo(leftSlideIndex - 1);
+            } else if (leftSlideIndex == 0) {
+                moveSlidesContainerTo(slides.length - 1);
+            }
     };
 
     var slideRight = function() {
@@ -83,20 +83,19 @@
 
     var startAutoSliding = function() {
         stopAutoSliding();
-        currentAutoSlidingTimer = setTimeout(function() {
-            slideLeft();
+        curAutoSlidingTimer = setTimeout(function() {
+            slideRight();
             startAutoSliding();
         }, params.autoSlidingDelay);
     };
 
     var stopAutoSliding = function() {
-        clearTimeout(currentAutoSlidingTimer);
+        clearTimeout(curAutoSlidingTimer);
     };
 
     var moveSlidesContainerTo = function(slideIndex) {
-        var slidesContainerLeft = slidesLeftPos[slideIndex];
         leftSlideIndex = slideIndex;
-        slidesContainer.css({left: -slidesContainerLeft});
+        slidesContainer.css({left: -slidesLeftPos[slideIndex]});
     };
 
     var crossCssRule = function(property, value) {
