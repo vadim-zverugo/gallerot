@@ -65,12 +65,12 @@
         return this;
     };
 
-        var slideLeft = function() {
-            if (leftSlideIndex > 0) {
-                moveSlidesContainerTo(leftSlideIndex - 1);
-            } else if (leftSlideIndex == 0) {
-                moveSlidesContainerTo(slides.length - 1);
-            }
+    var slideLeft = function () {
+        if (leftSlideIndex > 0) {
+            moveSlidesContainerTo(leftSlideIndex - 1);
+        } else if (leftSlideIndex == 0) {
+            moveSlidesContainerTo(slides.length - 1);
+        }
     };
 
     var slideRight = function() {
