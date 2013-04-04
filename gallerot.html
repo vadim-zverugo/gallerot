@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Gallerot</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <link rel="stylesheet" href="style.css"/>
         <link rel="stylesheet" href="gallerot.css"/>
         <script src="jquery.js"></script>
         <script src="jquery.gallerot.js"></script>
         <script>
-            jQuery(document).ready(function() {
-                jQuery("#gallerot").gallerot({
+            $(document).ready(function() {
+                $("#gallerot").gallerot({
                     leftControl: '#gallerot-left',
                     rightControl: '#gallerot-right',
                     width: 1000,
@@ -17,17 +17,18 @@
                     slidingSpeed: 1000,
                     enableAutoSliding: true,
                     autoSlidingDelay: 3000,
-                    stopAutoSlidingOnHover: true,
-                    autoSlidingDirection: 'right'
+                    stopAutoSlidingOnHover: true
                 });
             });
         </script>
     </head>
 
     <body>
+    <!-- Control for sliding left -->
     <div id="gallerot-left" class="slider-left-control"></div>
 
     <div class="slider-container">
+        <!-- Base structure for the Gallerot slider -->
         <div id="gallerot">
             <ul>
                 <li>
@@ -35,7 +36,7 @@
                         <div class="picture">
                             <img src="./images/1.jpg" width="301">
                         </div>
-                        <span class="caption">New York City #1</span>
+                        <span class="caption">New York #1</span>
                     </div>
                 </li>
                 <li>
@@ -43,7 +44,7 @@
                         <div class="picture">
                             <img src="./images/2.jpg" width="301">
                         </div>
-                        <span class="caption">New York City #2</span>
+                        <span class="caption">New York #2</span>
                     </div>
                 </li>
                 <li>
@@ -51,7 +52,7 @@
                         <div class="picture">
                             <img src="./images/3.jpg" width="320">
                         </div>
-                        <span class="caption">New York City #3</span>
+                        <span class="caption">New York #3</span>
                     </div>
                 </li>
                 <li>
@@ -59,7 +60,7 @@
                         <div class="picture">
                             <img src="./images/4.jpg" width="267">
                         </div>
-                        <span class="caption">New York City #4</span>
+                        <span class="caption">New York #4</span>
                     </div>
                 </li>
                 <li>
@@ -67,13 +68,14 @@
                         <div class="picture">
                             <img src="./images/5.jpg" width="267">
                         </div>
-                        <span class="caption">New York City #5</span>
+                        <span class="caption">New York #5</span>
                     </div>
                 </li>
             </ul>
         </div>
     </div>
 
+    <!-- Control for sliding right -->
     <div id="gallerot-right" class="slider-right-control"></div>
     </body>
 </html>

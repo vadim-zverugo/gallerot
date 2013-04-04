@@ -1,19 +1,18 @@
-.slider-left-control {
-    float: left;
-    width: 50px;
-    height: 200px;
-    background-color: #ccc;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
+.slider-left-control,
 .slider-right-control {
     float: left;
     width: 50px;
     height: 200px;
     background-color: #ccc;
-    margin-left: 10px;
     cursor: pointer;
+}
+
+.slider-left-control {
+    margin-right: 10px;
+}
+
+.slider-right-control {
+    margin-left: 10px;
 }
 
 .slider-container {

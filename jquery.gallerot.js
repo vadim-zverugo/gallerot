@@ -1,12 +1,12 @@
 (function($) {
-    var params;                  // Initial parameters.
-    var baseContainer;           // Container that contains list (<div>).
-    var slidesContainer;         // Container that contains all items of list (<ul>).
-    var slides;                  // All items of the list (<li>).
-    var slidesWidth;             // Contains width of each list item.
-    var slidesLeftPos;           // Contains left position of each list item.
-    var leftSlidingControl;      // Control for sliding to left.
-    var rightSlidingControl;     // Control for sliding to right.
+    var params;                  // Configuration parameters.
+    var baseContainer;           // Container that contains list of slides (<div>).
+    var slidesContainer;         // Container that contains all slides (<ul>).
+    var slides;                  // All slides (<li>).
+    var slidesWidth;             // Contains width of each slide.
+    var slidesLeftPos;           // Contains left position of each slide.
+    var leftSlidingControl;      // Control for sliding left.
+    var rightSlidingControl;     // Control for sliding right.
     var leftSlideIndex;          // Current index of the left visible slide.
     var curAutoSlidingTimer;     // Current timer for auto-sliding.
 
