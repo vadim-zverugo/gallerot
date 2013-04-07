@@ -3,8 +3,10 @@
     float: left;
     width: 50px;
     height: 200px;
+    line-height: 200px;
     background-color: #ccc;
     cursor: pointer;
+    text-align: center;
 }
 
 .slider-left-control {
@@ -26,12 +28,15 @@
     margin: 0 5px;
 }
 
-.slider-container .slide-box .picture {
+.slider-container .slide-box .picture img {
+    display: block;
 }
 
 .slider-container .slide-box .caption {
     position: absolute;
     bottom: 0;
-    width: 100%;
-    color: #fff;
+    padding: 3px 5px;
+    background-color: #fff;
+    opacity: 0.75;
+    color: #333;
 }

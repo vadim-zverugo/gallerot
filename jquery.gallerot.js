@@ -14,14 +14,14 @@
 
     $.fn.gallerot = function(parameters) {
         params = $.extend({
-            width: null,
-            height: null,
-            leftControl : null,
-            rightControl : null,
-            slidingSpeed: 1000,
-            enableAutoSliding: false,
-            autoSlidingDelay: 6000,
-            stopAutoSlidingOnHover: true
+            width: null, // Width of base container.
+            height: null, // Height of base container.
+            leftControl : null, // Control for sliding left.
+            rightControl : null, // Control for sliding right.
+            slidingSpeed: 1000, // Speed of sliding (milliseconds).
+            enableAutoSliding: false, // If true the feature of auto sliding will be enabled.
+            autoSlidingDelay: 6000, // Delay between sliding in the auto mode.
+            stopAutoSlidingOnHover: true // Stop sliding if mouse over the slider.
         }, parameters);
         baseContainer = $(this);
         slidesContainer = baseContainer.children('ul');
