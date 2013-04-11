@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Gallerot jQuery + CSS3 slider</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" href="example.css"/>
+        <link rel="stylesheet" href="gallerot.css"/>
+        <script src="jquery.js"></script>
+        <script src="jquery.gallerot.js"></script>
+        <script>
+            $(document).ready(function() {
+                $("#gallerot").gallerot({
+                    leftControl: '#gallerot-left',
+                    rightControl: '#gallerot-right',
+                    width: 1000,
+                    height: 200,
+                    slidingSpeed: 1000,
+                    enableAutoSliding: true,
+                    autoSlidingDelay: 3000,
+                    stopAutoSlidingOnHover: true
+                });
+            });
+        </script>
+    </head>
+
+    <body>
+    <div id="gallerot-left" class="slider-left-control"></div>
+
+    <div class="slider-container">
+        <div id="gallerot">
+            <ul>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/1.png" width="301">
+                        </div>
+                        <span class="caption">New York #1</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/2.png" width="301">
+                        </div>
+                        <span class="caption">New York #2</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/3.png" width="320">
+                        </div>
+                        <span class="caption">New York #3</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/4.png" width="267">
+                        </div>
+                        <span class="caption">New York #4</span>
+                    </div>
+                </li>
+                <li>
+                    <div class="slide-box">
+                        <div class="picture">
+                            <img src="./images/5.png" width="267">
+                        </div>
+                        <span class="caption">New York #5</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="gallerot-right" class="slider-right-control"></div>
+    </body>
+</html>

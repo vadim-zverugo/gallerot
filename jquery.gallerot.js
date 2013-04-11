@@ -3,7 +3,6 @@
     var baseContainer;           // Container that contains list of slides (<div>).
     var slidesContainer;         // Container that contains all slides (<ul>).
     var slides;                  // All slides (<li>).
-    var slidesWidth;             // Contains width of each slide.
     var slidesLeftPos;           // Contains left position of each slide.
     var leftSlidingControl;      // Control for sliding left.
     var rightSlidingControl;     // Control for sliding right.
@@ -29,7 +28,6 @@
         leftSlidingControl = $(params.leftControl);
         rightSlidingControl = $(params.rightControl);
         leftSlideIndex = 0;
-        slidesWidth = {};
         slidesLeftPos = {};
 
         // Positioning and sizing.
@@ -39,7 +37,6 @@
         var slidesOverallWidth = 0;
         for (var i = 0; i < slides.length; i++) {
             var slideWidth = $(slides[i]).width();
-            slidesWidth[i] = slideWidth;
             slidesLeftPos[i] = slidesOverallWidth;
             slidesOverallWidth += slideWidth;
         }

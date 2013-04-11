@@ -1,0 +1,41 @@
+.slider-left-control,
+.slider-right-control {
+    float: left;
+    width: 50px;
+    height: 200px;
+    background-color: #ccc;
+    cursor: pointer;
+}
+
+.slider-left-control {
+    margin-right: 10px;
+}
+
+.slider-right-control {
+    margin-left: 10px;
+}
+
+.slider-container {
+    float: left;
+    width: 1000px;
+    height: 200px;
+}
+
+.slider-container .slide-box {
+    position: relative;
+    margin: 0 5px;
+}
+
+.slider-container .slide-box .picture img {
+    display: block;
+}
+
+.slider-container .slide-box .caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    opacity: 0.7;
+    color: #333;
+    padding: 4px 8px;
+}
