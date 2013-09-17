@@ -15,6 +15,16 @@
     border: none;
 }
 
+.gallerot-container > ul:before,
+.gallerot-container > ul:after {
+    content: " ";
+    display: table;
+}
+
+.gallerot-container > ul:after {
+    clear: both;
+}
+
 .gallerot-container > ul > li {
     float: left;
     margin: 0;
