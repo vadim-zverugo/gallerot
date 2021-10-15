@@ -58,13 +58,3 @@ Options
 * `enableAutoSliding` (optional, defaults to false): enables auto-sliding with the specified interval `autoSlidingDelay`. 
 * `autoSlidingDelay` (optional, defaults to 6000): delay between sliding when `enableAutoSliding` is set to true.
 * `stopAutoSlidingOnHover` (optional, defaults to true): allows to stop auto-sliding on hovering.
-
-Demo
------
-
-https://dl.dropboxusercontent.com/u/166615135/gallerot/example.html
-
-Additional
------
-
-http://www.sitedev.by/blog/gallerot-slider
